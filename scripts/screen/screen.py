@@ -28,8 +28,8 @@ class Screen:
     # screen frame
     def frame(self, frame_number):
 
-        # apply load speed
-        sleep(self.config_provider.load_speed)
+        # apply load delay
+        sleep(self.config_provider.load_delay)
 
         # load frame from disk
         frame = self.disk.load_frame(self.config_provider.screen_load_from, None, frame_number, self.config_provider.frame_format)

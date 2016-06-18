@@ -54,8 +54,8 @@ class ConfigProvider:
         return self.config.getint('Shared', 'NumberOfCameras')
 
     @property
-    def load_speed(self):
-        return self.config.getfloat('Shared', 'LoadSpeed')
+    def load_delay(self):
+        return self.config.getfloat('Shared', 'LoadDelay')
 
     @property
     def frame_format(self):
