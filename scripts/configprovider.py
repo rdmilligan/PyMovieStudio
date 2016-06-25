@@ -58,6 +58,10 @@ class ConfigProvider:
         return self.config.getboolean('Effects', 'ShowFrame')
 
     @property
+    def effects_tracking(self):
+        return self.config.getboolean('Effects', 'Tracking')
+
+    @property
     def screen_enabled(self):
         return self.config.getboolean('Screen', 'Enabled')
 

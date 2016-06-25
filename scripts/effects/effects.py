@@ -29,7 +29,8 @@ class Effects:
             return False
 
         # track frame
-        frame = self.tracking.frame(frame)
+        if self.config_provider.effects_tracking:
+            frame = self.tracking.frame(frame)
 
         # show frame
         if self.config_provider.effects_show_frame:
