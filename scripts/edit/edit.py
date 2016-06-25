@@ -1,8 +1,6 @@
 # Copyright (C) 2016 Ross D Milligan
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
-from configprovider import ConfigProvider
-from disk import Disk
 from speech import Speech
 from time import sleep
 import cv2

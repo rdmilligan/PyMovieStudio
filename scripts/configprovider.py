@@ -42,6 +42,22 @@ class ConfigProvider:
         return self.config.get('Edit', 'CameraNames')
 
     @property
+    def effects_enabled(self):
+        return self.config.getboolean('Effects', 'Enabled')
+
+    @property
+    def effects_load_from(self):
+        return self.config.get('Effects', 'LoadFrom')
+
+    @property
+    def effects_save_to(self):
+        return self.config.get('Effects', 'SaveTo')
+
+    @property
+    def effects_show_frame(self):
+        return self.config.getboolean('Effects', 'ShowFrame')
+
+    @property
     def screen_enabled(self):
         return self.config.getboolean('Screen', 'Enabled')
 

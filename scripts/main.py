@@ -8,6 +8,7 @@ from configprovider import ConfigProvider
 from disk import Disk
 from record import Record
 from edit import Edit
+from effects import Effects
 from screen import Screen
 
 class PyMovieStudio:
@@ -30,6 +31,11 @@ class PyMovieStudio:
         self.edit = None
         if self.config_provider.edit_enabled:
             self.edit = Edit(self.config_provider, self.disk)
+
+        # effects
+        self.effects = None
+        if self.config_provider.effects_enabled:
+            self.effects = Effects(self.config_provider, self.disk)
 
         # screen
         self.screen = None
@@ -67,6 +73,10 @@ class PyMovieStudio:
         # edit
         if self.edit:
             if self.edit.frame(self.frame_number) == False: return
+
+        # effects
+        if self.effects:
+            if self.effects.frame(self.frame_number) == False: return
 
         # screen
         if self.screen:

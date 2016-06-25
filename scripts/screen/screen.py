@@ -2,8 +2,6 @@
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
 from OpenGL.GL import *
-from configprovider import ConfigProvider
-from disk import Disk
 from time import sleep
 import cv2
 from PIL import Image
