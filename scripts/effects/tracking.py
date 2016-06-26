@@ -16,20 +16,19 @@ class Tracking:
 
         # apply background subtraction
         fgmask = self.backgroundSubtraction.apply(frame, learningRate=1.0/12)
-        frame = cv2.cvtColor(fgmask, cv2.COLOR_GRAY2RGB)
 
         # get contours for objects in foreground
         contours = self._get_contours(fgmask)
         if not contours: return frame
 
         # get largest contour
-        contour = sorted(contours, key=cv2.contourArea, reverse=True)[:1][0]
+        contour = sorted(contours, key=cv2.contourArea, reverse=True)[0]
 
         # get centre coordinates of contour
         coord = self._get_contour_centroid(contour)
 
-        # drawn coordinates
-        self._draw_coordinates(frame, contour, coord)
+        # drawn circle at coordinates
+        cv2.circle(frame, coord, 6, (0,0,255), -1)
 
         return frame
 
@@ -48,8 +47,4 @@ class Tracking:
             return (cx, cy)
         except:
             return (0, 0)
- 
-    # draw coordinates on image
-    def _draw_coordinates(self, image, contour, coord):
-        cv2.drawContours(image, [contour], -1, (0, 255, 0), 3)
-        cv2.putText(image, "Co-ordinates {}".format(coord), (coord[0], coord[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0))
+
