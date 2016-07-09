@@ -5,6 +5,7 @@ from OpenGL.GL import *
 from time import sleep
 import cv2
 from PIL import Image
+from pygame import mixer
 
 class Screen:
 
@@ -16,6 +17,10 @@ class Screen:
         # texture
         self.texture_background = None
 
+        # audio
+        self.audio_log = self.disk.load_log(self.config_provider.screen_load_from)
+        mixer.init()
+
     # initialise OpenGL
     def init_opengl(self):
         
@@ -26,8 +31,8 @@ class Screen:
     # screen frame
     def frame(self, frame_number):
 
-        # apply load delay
-        sleep(self.config_provider.load_delay)
+        # apply frame delay
+        sleep(self.config_provider.frame_delay)
 
         # load frame from disk
         frame = self.disk.load_frame(self.config_provider.screen_load_from, None, frame_number, self.config_provider.frame_format)
@@ -61,6 +66,28 @@ class Screen:
         glEnd( )
         glPopMatrix()
 
+        # handle audio
+        self._handle_audio(frame_number)
+
         return True
+
+    # handle audio
+    def _handle_audio(self, frame_number):
+
+        # loop audio log
+        for item in self.audio_log:
+
+            # extract frame number and sound file 
+            item_parts = item.split(',')
+            item_frame_number = int(item_parts[0])
+            item_sound_file = item_parts[1].replace('\n', '')
+
+            # play sound if frames match
+            if item_frame_number == frame_number:
+                mixer.Sound("{}{}".format(self.config_provider.screen_load_from, item_sound_file)).play()
+                break
+        
+
+
 
 

@@ -43,8 +43,8 @@ class Edit:
         if camera_name in self.cameras:
             self.camera_number = self.cameras.index(camera_name) 
 
-        # apply load delay
-        sleep(self.config_provider.load_delay)
+        # apply frame delay
+        sleep(self.config_provider.frame_delay)
 
         # load frame from disk
         frame = self.disk.load_frame(self.config_provider.edit_load_from, self.camera_number, frame_number, self.config_provider.frame_format)

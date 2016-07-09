@@ -16,6 +16,10 @@ Replay the recorded movie and use speech recognition to cut between camera angle
 
 Add object tracking to the movie.
 
+## Add audio to movie
+
+Add sound files to the movie.
+
 ## Screen movie
 
 Watch the edited movie to your heart's content, with a big box of popcorn!

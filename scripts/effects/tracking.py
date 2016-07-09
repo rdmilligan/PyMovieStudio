@@ -27,8 +27,8 @@ class Tracking:
         # get centre coordinates of contour
         coord = self._get_contour_centroid(contour)
 
-        # drawn circle at coordinates
-        cv2.circle(frame, coord, 6, (0,0,255), -1)
+        # draw crosshairs at coordinates
+        self._draw_crosshairs(frame, coord)
 
         return frame
 
@@ -48,3 +48,19 @@ class Tracking:
         except:
             return (0, 0)
 
+    # draw crosshairs
+    def _draw_crosshairs(self, frame, coord):
+        
+        # set crosshairs colour
+        crosshairs_colour = (0,0,255)
+
+        # set crosshairs points
+        top_point = (coord[0], coord[1] - 20)
+        bottom_point = (coord[0], coord[1] + 20)
+        left_point = (coord[0] - 20, coord[1])
+        right_point = (coord[0] + 20, coord[1])
+
+        # draw crosshairs
+        cv2.circle(frame, coord, 12, crosshairs_colour, 2)
+        cv2.line(frame, top_point, bottom_point, crosshairs_colour, 1)
+        cv2.line(frame, left_point, right_point, crosshairs_colour, 1)

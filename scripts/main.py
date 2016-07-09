@@ -9,6 +9,7 @@ from disk import Disk
 from record import Record
 from edit import Edit
 from effects import Effects
+from audio import Audio
 from screen import Screen
 
 class PyMovieStudio:
@@ -36,6 +37,11 @@ class PyMovieStudio:
         self.effects = None
         if self.config_provider.effects_enabled:
             self.effects = Effects(self.config_provider, self.disk)
+
+        # audio
+        self.audio = None
+        if self.config_provider.audio_enabled:
+            self.audio = Audio(self.config_provider, self.disk)
 
         # screen
         self.screen = None
@@ -77,6 +83,10 @@ class PyMovieStudio:
         # effects
         if self.effects:
             if self.effects.frame(self.frame_number) == False: return
+
+        # audio
+        if self.audio:
+            if self.audio.frame(self.frame_number) == False: return
 
         # screen
         if self.screen:

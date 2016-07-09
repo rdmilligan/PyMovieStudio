@@ -58,8 +58,28 @@ class ConfigProvider:
         return self.config.getboolean('Effects', 'ShowFrame')
 
     @property
-    def effects_tracking(self):
-        return self.config.getboolean('Effects', 'Tracking')
+    def audio_enabled(self):
+        return self.config.getboolean('Audio', 'Enabled')
+
+    @property
+    def audio_load_from(self):
+        return self.config.get('Audio', 'LoadFrom')
+
+    @property
+    def audio_save_to(self):
+        return self.config.get('Audio', 'SaveTo')
+
+    @property
+    def audio_show_frame(self):
+        return self.config.getboolean('Audio', 'ShowFrame')
+
+    @property
+    def audio_sound_file(self):
+        return self.config.get('Audio', 'SoundFile')
+
+    @property
+    def audio_sound_delay(self):
+        return self.config.getint('Audio', 'SoundDelay')
 
     @property
     def screen_enabled(self):
@@ -74,8 +94,8 @@ class ConfigProvider:
         return self.config.getint('Shared', 'NumberOfCameras')
 
     @property
-    def load_delay(self):
-        return self.config.getfloat('Shared', 'LoadDelay')
+    def frame_delay(self):
+        return self.config.getfloat('Shared', 'FrameDelay')
 
     @property
     def frame_format(self):
