@@ -45,8 +45,8 @@ class Record:
             if frame is None:
                 return False
 
-            # show frame
-            if self.config_provider.record_show_frames:
+            # display frame
+            if self.config_provider.record_display_frame:
                 cv2.imshow('Record: camera number {}'.format(camera_number), frame)
                 cv2.waitKey(1)
 
