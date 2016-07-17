@@ -1,25 +1,32 @@
 # Copyright (C) 2016 Ross D Milligan
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
-from constants import *
-from pygame import mixer
+from OpenGL.GL import *
 from time import sleep
+import cv2
+from PIL import Image
+from pygame import mixer
 
 class Screen:
 
     # initialise
-    def __init__(self, config_provider, disk, display, graphics):
+    def __init__(self, config_provider, disk):
         self.config_provider = config_provider
         self.disk = disk
-        self.display = display
-        self.graphics = graphics
 
-        # effects
-        self.effects_log = self.disk.load_log(self.config_provider.screen_load_from, EFFECTS_LOG_FILENAME)
+        # texture
+        self.texture_background = None
 
         # audio
-        self.audio_log = self.disk.load_log(self.config_provider.screen_load_from, self.LOG_FILENAME)
+        self.audio_log = self.disk.load_log(self.config_provider.screen_load_from)
         mixer.init()
+
+    # initialise OpenGL
+    def init_opengl(self):
+        
+        # texture
+        glEnable(GL_TEXTURE_2D)
+        self.texture_background = glGenTextures(1)
 
     # screen frame
     def frame(self, frame_number):
@@ -34,32 +41,35 @@ class Screen:
         if frame is None:
             return False
 
-        # handle effects
-        self._handle_effects(frame_number)
+        # convert frame to OpenGL texture format
+        bg_image = cv2.flip(frame, 0)
+        bg_image = Image.fromarray(bg_image)     
+        ix = bg_image.size[0]
+        iy = bg_image.size[1]
+        bg_image = bg_image.tobytes('raw', 'BGRX', 0, -1)
+ 
+        # create background texture
+        glBindTexture(GL_TEXTURE_2D, self.texture_background)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, bg_image)
+        
+        # draw background
+        glBindTexture(GL_TEXTURE_2D, self.texture_background)
+        glPushMatrix()
+        glTranslatef(0.0,0.0,-10.0)
+        glBegin(GL_QUADS)
+        glTexCoord2f(0.0, 1.0); glVertex3f(-4.0, -3.0, 0.0)
+        glTexCoord2f(1.0, 1.0); glVertex3f( 4.0, -3.0, 0.0)
+        glTexCoord2f(1.0, 0.0); glVertex3f( 4.0,  3.0, 0.0)
+        glTexCoord2f(0.0, 0.0); glVertex3f(-4.0,  3.0, 0.0)
+        glEnd( )
+        glPopMatrix()
 
         # handle audio
         self._handle_audio(frame_number)
 
-        # display frame
-        self.display.frame(frame)
-
         return True
-
-    # handle effects
-    def _handle_effects(self, frame_number):
-
-        # loop effects log
-        for item in self.effects_log:
-
-            # extract frame number 
-            item_parts = item.split(',')
-            item_frame_number = int(item_parts[0])
-
-            # apply fog intensity if frames match
-            if item_frame_number == frame_number:
-                item_fog_intensity = float(item_parts[1].replace('\n', ''))
-                self.graphics.fog(item_fog_intensity)
-                break
 
     # handle audio
     def _handle_audio(self, frame_number):
@@ -67,13 +77,13 @@ class Screen:
         # loop audio log
         for item in self.audio_log:
 
-            # extract frame number 
+            # extract frame number and sound file 
             item_parts = item.split(',')
             item_frame_number = int(item_parts[0])
+            item_sound_file = item_parts[1].replace('\n', '')
 
             # play sound if frames match
             if item_frame_number == frame_number:
-                item_sound_file = item_parts[1].replace('\n', '')
                 mixer.Sound("{}{}".format(self.config_provider.screen_load_from, item_sound_file)).play()
                 break
         

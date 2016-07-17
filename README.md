@@ -14,7 +14,7 @@ Replay the recorded movie and use speech recognition to cut between camera angle
 
 ## Add special effects to movie
 
-Add object tracking and fog to the movie.
+Add object tracking to the movie.
 
 ## Add audio to movie
 

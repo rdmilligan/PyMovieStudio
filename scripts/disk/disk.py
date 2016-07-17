@@ -14,11 +14,11 @@ class Disk:
         cv2.imwrite(self._get_frame_disk_location(path, camera_number, frame_number, frame_format), frame)
 
     # load log from disk
-    def load_log(self, path, filename):
+    def load_log(self, path):
         log = []
 
         try:
-            with open(self._get_log_disk_location(path, filename)) as log_file:
+            with open(self._get_log_disk_location(path)) as log_file:
                 log = log_file.readlines()
         except:
             print "Unable to load log"
@@ -26,13 +26,13 @@ class Disk:
         return log
 
     # save log to disk
-    def save_log(self, log_text, path, filename):
-        with open(self._get_log_disk_location(path, filename), "a") as log_file:
+    def save_log(self, log_text, path):
+        with open(self._get_log_disk_location(path), "a") as log_file:
             log_file.write(log_text + '\n')
 
     # clear log on disk
-    def clear_log(self, path, filename):
-        open(self._get_log_disk_location(path, filename), 'w').close()
+    def clear_log(self, path):
+        open(self._get_log_disk_location(path), 'w').close()
 
     # get frame disk location
     def _get_frame_disk_location(self, path, camera_number, frame_number, frame_format):
@@ -49,8 +49,8 @@ class Disk:
         return '{}{}{}'.format(path, camera_folder, frame_name)
 
     # get log disk location
-    def _get_log_disk_location(self, path, filename):
-        return "{}{}.txt".format(path, filename)
+    def _get_log_disk_location(self, path):
+        return "{}log.txt".format(path)
 
 
 

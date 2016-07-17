@@ -3,14 +3,14 @@
 
 from speech import Speech
 from time import sleep
+import cv2
 
 class Edit:
 
     # initialise
-    def __init__(self, config_provider, disk, display):
+    def __init__(self, config_provider, disk):
         self.config_provider = config_provider
         self.disk = disk
-        self.display = display
 
         # cameras
         self.cameras = self._create_cameras()
@@ -53,9 +53,10 @@ class Edit:
         if frame is None:
             return False
 
-        # display frame
-        if self.config_provider.edit_display_frame:
-            self.display.frame(frame)
+        # show frame
+        if self.config_provider.edit_show_frame:
+            cv2.imshow('Edit: camera', frame)
+            cv2.waitKey(1)
 
         # save frame to disk
         self.disk.save_frame(frame, self.config_provider.edit_save_to, None, frame_number, self.config_provider.frame_format)

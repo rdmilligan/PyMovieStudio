@@ -5,7 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from configprovider import ConfigProvider
-from utilities import *
+from disk import Disk
 from record import Record
 from edit import Edit
 from effects import Effects
@@ -23,18 +23,6 @@ class PyMovieStudio:
         # disk
         self.disk = Disk()
 
-        # display
-        self.display = None
-        if (self.config_provider.edit_enabled or self.config_provider.effects_enabled or
-            self.config_provider.audio_enabled or self.config_provider.screen_enabled):
-            self.display = Display()
-
-        # graphics
-        self.graphics = None
-        if (self.config_provider.effects_enabled or self.config_provider.audio_enabled or
-            self.config_provider.screen_enabled):
-            self.graphics = Graphics()
-
         # record
         self.record = None
         if self.config_provider.record_enabled:
@@ -43,22 +31,22 @@ class PyMovieStudio:
         # edit
         self.edit = None
         if self.config_provider.edit_enabled:
-            self.edit = Edit(self.config_provider, self.disk, self.display)
+            self.edit = Edit(self.config_provider, self.disk)
 
         # effects
         self.effects = None
         if self.config_provider.effects_enabled:
-            self.effects = Effects(self.config_provider, self.disk, self.display, self.graphics)
+            self.effects = Effects(self.config_provider, self.disk)
 
         # audio
         self.audio = None
         if self.config_provider.audio_enabled:
-            self.audio = Audio(self.config_provider, self.disk, self.display, self.graphics)
+            self.audio = Audio(self.config_provider, self.disk)
 
         # screen
         self.screen = None
         if self.config_provider.screen_enabled:
-            self.screen = Screen(self.config_provider, self.disk, self.display, self.graphics)
+            self.screen = Screen(self.config_provider, self.disk)
 
         # frame number
         self.frame_number = 0 
@@ -75,9 +63,9 @@ class PyMovieStudio:
         gluPerspective(33.7, 1.3, 0.1, 100.0)
         glMatrixMode(GL_MODELVIEW)
 
-        # display
-        if self.display:
-            self.display.init_opengl()
+        # screen
+        if self.screen:
+            self.screen.init_opengl()
 
     # process frame
     def _process_frame(self):
