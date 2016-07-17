@@ -18,8 +18,8 @@ class ConfigProvider:
         return self.config.get('Record', 'SaveTo')
 
     @property
-    def record_show_frames(self):
-        return self.config.getboolean('Record', 'ShowFrames')
+    def record_display_frame(self):
+        return self.config.getboolean('Record', 'DisplayFrame')
 
     @property
     def edit_enabled(self):
@@ -34,8 +34,8 @@ class ConfigProvider:
         return self.config.get('Edit', 'SaveTo')
 
     @property
-    def edit_show_frame(self):
-        return self.config.getboolean('Edit', 'ShowFrame')
+    def edit_display_frame(self):
+        return self.config.getboolean('Edit', 'DisplayFrame')
 
     @property
     def edit_camera_names(self):
@@ -54,8 +54,16 @@ class ConfigProvider:
         return self.config.get('Effects', 'SaveTo')
 
     @property
-    def effects_show_frame(self):
-        return self.config.getboolean('Effects', 'ShowFrame')
+    def effects_display_frame(self):
+        return self.config.getboolean('Effects', 'DisplayFrame')
+
+    @property
+    def effects_fog_intensity(self):
+        return self.config.getfloat('Effects', 'FogIntensity')
+
+    @property
+    def effects_fog_delay(self):
+        return self.config.getint('Effects', 'FogDelay')
 
     @property
     def audio_enabled(self):
@@ -70,8 +78,8 @@ class ConfigProvider:
         return self.config.get('Audio', 'SaveTo')
 
     @property
-    def audio_show_frame(self):
-        return self.config.getboolean('Audio', 'ShowFrame')
+    def audio_display_frame(self):
+        return self.config.getboolean('Audio', 'DisplayFrame')
 
     @property
     def audio_sound_file(self):
