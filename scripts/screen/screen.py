@@ -18,7 +18,7 @@ class Screen:
         self.effects_log = self.disk.load_log(self.config_provider.screen_load_from, EFFECTS_LOG_FILENAME)
 
         # audio
-        self.audio_log = self.disk.load_log(self.config_provider.screen_load_from, self.LOG_FILENAME)
+        self.audio_log = self.disk.load_log(self.config_provider.screen_load_from, AUDIO_LOG_FILENAME)
         mixer.init()
 
     # screen frame
