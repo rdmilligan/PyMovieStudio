@@ -9,20 +9,18 @@ from random import randint
 class Audio:
 
     # initialise
-    def __init__(self, config_provider, disk, display, graphics):
+    def __init__(self, config_provider, disk, display, replay, graphics):
         self.config_provider = config_provider
         self.disk = disk
         self.display = display
+        self.replay = replay
         self.graphics = graphics
 
         # clear logs on disk
         self.disk.clear_log(self.config_provider.audio_save_to, EFFECTS_LOG_FILENAME)
         self.disk.clear_log(self.config_provider.audio_save_to, AUDIO_LOG_FILENAME)
 
-        # effects
-        self.effects_log = self.disk.load_log(self.config_provider.audio_load_from, EFFECTS_LOG_FILENAME)
-
-        # pygame audio
+        # pygame mixer
         mixer.init()
 
     # add audio to frame
@@ -38,8 +36,8 @@ class Audio:
         if frame is None:
             return False
 
-        # handle effects
-        self._handle_effects(frame_number)
+        # replay effects
+        self.replay.effects(frame_number, self.disk, self.graphics, self.config_provider.audio_load_from, self.config_provider.audio_save_to, EFFECTS_LOG_FILENAME)
 
         # apply sound delay
         if randint(0, self.config_provider.audio_sound_delay) == 0:
@@ -58,22 +56,3 @@ class Audio:
         self.disk.save_frame(frame, self.config_provider.audio_save_to, None, frame_number, self.config_provider.frame_format)
 
         return True
-
-    # handle effects
-    def _handle_effects(self, frame_number):
-
-        # loop effects log
-        for item in self.effects_log:
-
-            # extract frame number
-            item_parts = item.split(',')
-            item_frame_number = int(item_parts[0])
-
-            # apply fog intensity if frames match
-            if item_frame_number == frame_number:
-                item_fog_intensity = float(item_parts[1].replace('\n', ''))
-                self.graphics.fog(item_fog_intensity)
-
-                # save log to disk
-                self.disk.save_log("{},{}".format(frame_number, item_fog_intensity), self.config_provider.audio_save_to, EFFECTS_LOG_FILENAME)
-                break

@@ -29,6 +29,12 @@ class PyMovieStudio:
             self.config_provider.audio_enabled or self.config_provider.screen_enabled):
             self.display = Display()
 
+        # replay
+        self.replay = None
+        if (self.config_provider.edit_enabled or self.config_provider.audio_enabled or 
+            self.config_provider.screen_enabled):
+            self.replay = Replay()
+
         # graphics
         self.graphics = None
         if (self.config_provider.effects_enabled or self.config_provider.audio_enabled or
@@ -43,7 +49,7 @@ class PyMovieStudio:
         # edit
         self.edit = None
         if self.config_provider.edit_enabled:
-            self.edit = Edit(self.config_provider, self.disk, self.display)
+            self.edit = Edit(self.config_provider, self.disk, self.display, self.replay)
 
         # effects
         self.effects = None
@@ -53,12 +59,12 @@ class PyMovieStudio:
         # audio
         self.audio = None
         if self.config_provider.audio_enabled:
-            self.audio = Audio(self.config_provider, self.disk, self.display, self.graphics)
+            self.audio = Audio(self.config_provider, self.disk, self.display, self.replay, self.graphics)
 
         # screen
         self.screen = None
         if self.config_provider.screen_enabled:
-            self.screen = Screen(self.config_provider, self.disk, self.display, self.graphics)
+            self.screen = Screen(self.config_provider, self.disk, self.display, self.replay, self.graphics)
 
         # frame number
         self.frame_number = 0 

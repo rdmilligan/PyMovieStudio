@@ -8,17 +8,14 @@ from time import sleep
 class Screen:
 
     # initialise
-    def __init__(self, config_provider, disk, display, graphics):
+    def __init__(self, config_provider, disk, display, replay, graphics):
         self.config_provider = config_provider
         self.disk = disk
         self.display = display
+        self.replay = replay
         self.graphics = graphics
 
-        # effects
-        self.effects_log = self.disk.load_log(self.config_provider.screen_load_from, EFFECTS_LOG_FILENAME)
-
-        # audio
-        self.audio_log = self.disk.load_log(self.config_provider.screen_load_from, AUDIO_LOG_FILENAME)
+        # pygame mixer
         mixer.init()
 
     # screen frame
@@ -34,50 +31,13 @@ class Screen:
         if frame is None:
             return False
 
-        # handle effects
-        self._handle_effects(frame_number)
+        # replay effects
+        self.replay.effects(frame_number, self.disk, self.graphics, self.config_provider.screen_load_from, None, EFFECTS_LOG_FILENAME)
 
-        # handle audio
-        self._handle_audio(frame_number)
+        # replay audio
+        self.replay.audio(frame_number, self.disk, mixer, self.config_provider.screen_load_from, AUDIO_LOG_FILENAME)
 
         # display frame
         self.display.frame(frame)
 
         return True
-
-    # handle effects
-    def _handle_effects(self, frame_number):
-
-        # loop effects log
-        for item in self.effects_log:
-
-            # extract frame number 
-            item_parts = item.split(',')
-            item_frame_number = int(item_parts[0])
-
-            # apply fog intensity if frames match
-            if item_frame_number == frame_number:
-                item_fog_intensity = float(item_parts[1].replace('\n', ''))
-                self.graphics.fog(item_fog_intensity)
-                break
-
-    # handle audio
-    def _handle_audio(self, frame_number):
-
-        # loop audio log
-        for item in self.audio_log:
-
-            # extract frame number 
-            item_parts = item.split(',')
-            item_frame_number = int(item_parts[0])
-
-            # play sound if frames match
-            if item_frame_number == frame_number:
-                item_sound_file = item_parts[1].replace('\n', '')
-                mixer.Sound("{}{}".format(self.config_provider.screen_load_from, item_sound_file)).play()
-                break
-        
-
-
-
-

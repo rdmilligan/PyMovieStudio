@@ -7,10 +7,11 @@ from time import sleep
 class Edit:
 
     # initialise
-    def __init__(self, config_provider, disk, display):
+    def __init__(self, config_provider, disk, display, replay):
         self.config_provider = config_provider
         self.disk = disk
         self.display = display
+        self.replay = replay
 
         # cameras
         self.cameras = self._create_cameras()
@@ -52,6 +53,10 @@ class Edit:
         # ensure frame loaded from disk
         if frame is None:
             return False
+
+        # replay record
+        if self.config_provider.edit_replay_record:
+            self.replay.record(frame_number, self.disk, self.config_provider.number_of_cameras, self.config_provider.edit_load_from, self.config_provider.frame_format)
 
         # display frame
         if self.config_provider.edit_display_frame:
