@@ -38,8 +38,8 @@ class ConfigProvider:
         return self.config.getboolean('Edit', 'DisplayFrame')
 
     @property
-    def edit_replay_record(self):
-        return self.config.getboolean('Edit', 'ReplayRecord')
+    def edit_display_record(self):
+        return self.config.getboolean('Edit', 'DisplayRecord')
 
     @property
     def edit_camera_names(self):

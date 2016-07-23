@@ -55,7 +55,7 @@ class Edit:
             return False
 
         # replay record
-        if self.config_provider.edit_replay_record:
+        if self.config_provider.edit_display_record:
             self.replay.record(frame_number, self.disk, self.config_provider.number_of_cameras, self.config_provider.edit_load_from, self.config_provider.frame_format)
 
         # display frame
