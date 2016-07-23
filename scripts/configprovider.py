@@ -62,12 +62,12 @@ class ConfigProvider:
         return self.config.getboolean('Effects', 'DisplayFrame')
 
     @property
-    def effects_fog_intensity(self):
-        return self.config.getfloat('Effects', 'FogIntensity')
+    def effects_tracking(self):
+        return self.config.getboolean('Effects', 'Tracking')
 
     @property
-    def effects_fog_delay(self):
-        return self.config.getint('Effects', 'FogDelay')
+    def effects_fog_start(self):
+        return self.config.getfloat('Effects', 'FogStart')
 
     @property
     def audio_enabled(self):

@@ -6,11 +6,11 @@ from OpenGL.GL import *
 class Graphics:
 
     # apply fog
-    def fog(self, fog_intensity):
+    def fog(self, fog_start):
         glFogi(GL_FOG_MODE, GL_LINEAR)
-        glFogfv(GL_FOG_COLOR, (fog_intensity, fog_intensity, fog_intensity, 1.0))
+        glFogfv(GL_FOG_COLOR, (0.5, 0.5, 0.5, 1.0))
         glHint(GL_FOG_HINT, GL_NICEST)
-        glFogf(GL_FOG_START, 1.0)
+        glFogf(GL_FOG_START, fog_start)
         glFogf(GL_FOG_END, 12.0)
         glEnable(GL_FOG)
 

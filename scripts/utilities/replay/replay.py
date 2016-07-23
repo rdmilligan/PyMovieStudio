@@ -35,14 +35,14 @@ class Replay:
             item_parts = item.split(',')
             item_frame_number = int(item_parts[0])
 
-            # apply fog intensity if frames match
+            # apply fog start if frames match
             if item_frame_number == frame_number:
-                item_fog_intensity = float(item_parts[1].replace('\n', ''))
-                graphics.fog(item_fog_intensity)
+                item_fog_start = float(item_parts[1].replace('\n', ''))
+                graphics.fog(item_fog_start)
 
                 # save log to disk
                 if save_to:
-                    disk.save_log("{},{}".format(frame_number, item_fog_intensity), save_to, filename)
+                    disk.save_log("{},{}".format(frame_number, item_fog_start), save_to, filename)
 
                 break
 
