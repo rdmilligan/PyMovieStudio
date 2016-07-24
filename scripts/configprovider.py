@@ -62,12 +62,16 @@ class ConfigProvider:
         return self.config.getboolean('Effects', 'DisplayFrame')
 
     @property
-    def effects_tracking(self):
-        return self.config.getboolean('Effects', 'Tracking')
+    def effects_foreground_tracking(self):
+        return self.config.getboolean('Effects', 'ForegroundTracking')
 
     @property
-    def effects_fog_start(self):
-        return self.config.getfloat('Effects', 'FogStart')
+    def effects_colour_tracking(self):
+        return self.config.getboolean('Effects', 'ColourTracking')
+
+    @property
+    def effects_fog(self):
+        return self.config.getboolean('Effects', 'Fog')
 
     @property
     def audio_enabled(self):

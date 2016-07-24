@@ -2,17 +2,12 @@
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
 from constants import *
-from tracking import Tracking
+from foregroundtracking import ForegroundTracking
+from colourtracking import ColourTracking
+from fog import Fog
 from time import sleep
-from random import randint
 
 class Effects:
-
-    # fog constants
-    FOG_START_LOWER = 0.0
-    FOG_START_UPPER = 10.0
-    FOG_START_SHIFT = 0.5
-    FOG_START_SHIFT_DELAY = 2
 
     # initialise
     def __init__(self, config_provider, disk, display, graphics):
@@ -24,25 +19,20 @@ class Effects:
         # clear log on disk
         self.disk.clear_log(self.config_provider.effects_save_to, EFFECTS_LOG_FILENAME)
 
-        # tracking
-        self.tracking = None
-        if self.config_provider.effects_tracking:
-            self.tracking = Tracking()
+        # foreground tracking
+        self.foreground_tracking = None
+        if self.config_provider.effects_foreground_tracking:
+            self.foreground_tracking = ForegroundTracking()
 
-        # fog start
-        self.fog_start = self._get_fog_start()
+        # colour tracking
+        self.colour_tracking = None
+        if self.config_provider.effects_colour_tracking:
+            self.colour_tracking = ColourTracking()
 
-    # get fog start
-    def _get_fog_start(self):
-        
-        # fog start
-        fog_start = self.config_provider.effects_fog_start
-
-        # ensure fog start within bounds
-        if (fog_start <= self.FOG_START_LOWER) or (fog_start >= self.FOG_START_UPPER):
-            return None
-
-        return fog_start
+        # fog
+        self.fog = None
+        if self.config_provider.effects_fog:
+            self.fog = Fog()
 
     # add special effects to frame
     def frame(self, frame_number):
@@ -57,17 +47,20 @@ class Effects:
         if frame is None:
             return False
 
-        # track frame
-        if self.tracking:
-            frame = self.tracking.frame(frame)
+        # foreground tracking
+        if self.foreground_tracking:
+            frame = self.foreground_tracking.apply(frame)
 
-        # apply fog
-        if self.fog_start:
-            self.fog_start = self._handle_fog_start(self.fog_start)
-            self.graphics.fog(self.fog_start)
+        # colour tracking
+        if self.colour_tracking:
+            frame = self.colour_tracking.apply(frame)
+
+        # fog
+        if self.fog:
+            fog_start = self.fog.apply(self.graphics)
 
             # save log to disk
-            self.disk.save_log("{},{}".format(frame_number, self.fog_start), self.config_provider.effects_save_to, EFFECTS_LOG_FILENAME)
+            self.disk.save_log("{},{}".format(frame_number, fog_start), self.config_provider.effects_save_to, EFFECTS_LOG_FILENAME)
 
         # display frame
         if self.config_provider.effects_display_frame:
@@ -77,24 +70,3 @@ class Effects:
         self.disk.save_frame(frame, self.config_provider.effects_save_to, None, frame_number, self.config_provider.frame_format)
 
         return True
-
-    # handle fog start
-    def _handle_fog_start(self, fog_start):
-
-            # determine whether to adjust fog start 
-            if randint(0, self.FOG_START_SHIFT_DELAY) != 0:
-                return fog_start
-
-            # randomly increase or decrease fog start
-            updated_fog_start = None
-
-            if randint(0, 1) == 0:
-                updated_fog_start = fog_start + self.FOG_START_SHIFT
-            else:
-                updated_fog_start = fog_start - self.FOG_START_SHIFT
-
-            # ensure fog start does not breach its bounds
-            if (updated_fog_start <= self.FOG_START_LOWER) or (updated_fog_start >= self.FOG_START_UPPER):
-               return fog_start 
-
-            return updated_fog_start

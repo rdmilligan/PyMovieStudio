@@ -5,20 +5,11 @@ import cv2
 
 class Tracking:
 
-    # initialise
-    def __init__(self):
-        
-        # background subtraction
-        self.backgroundSubtraction = cv2.BackgroundSubtractorMOG()
+    # handle mask
+    def handle_mask(self, mask, frame):
 
-    # track frame
-    def frame(self, frame):
-
-        # apply background subtraction
-        fgmask = self.backgroundSubtraction.apply(frame, learningRate=1.0/12)
-
-        # get contours for objects in foreground
-        contours = self._get_contours(fgmask)
+        # get contours for objects in mask
+        contours = self._get_contours(mask)
         if not contours: return frame
 
         # get largest contour
