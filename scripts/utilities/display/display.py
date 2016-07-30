@@ -9,19 +9,15 @@ class Display:
 
     # initialise
     def __init__(self):
-
-        # texture
-        self.texture_background = None
-
-    # initialise OpenGL
-    def init_opengl(self):
-
-        # texture
-        glEnable(GL_TEXTURE_2D)
-        self.texture_background = glGenTextures(1)
+        self.is_texture_init = False
 
     # display frame
     def frame(self, frame):
+
+        if not self.is_texture_init:
+            glEnable(GL_TEXTURE_2D)
+            self.texture_background = glGenTextures(1)
+            self.is_texture_init = True
 
         # convert frame to OpenGL texture format
         bg_image = cv2.flip(frame, 0)

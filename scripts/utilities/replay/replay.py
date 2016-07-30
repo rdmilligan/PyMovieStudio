@@ -2,6 +2,7 @@
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
 import cv2
+from constants import *
 
 class Replay:
 
@@ -23,10 +24,10 @@ class Replay:
             cv2.waitKey(1)
 
     # effects
-    def effects(self, frame_number, disk, graphics, load_from, save_to, filename):
+    def effects(self, frame_number, disk, graphics, load_from, save_to):
 
         # load log
-        effects_log = disk.load_log(load_from, filename)
+        effects_log = disk.load_log(load_from, EFFECTS_LOG_FILENAME)
 
         # loop log
         for item in effects_log:
@@ -35,22 +36,35 @@ class Replay:
             item_parts = item.split(',')
             item_frame_number = int(item_parts[0])
 
-            # apply fog start if frames match
-            if item_frame_number == frame_number:
-                item_fog_start = float(item_parts[1].replace('\n', ''))
+            if item_frame_number < frame_number: continue
+            if item_frame_number > frame_number: break
+
+            # extract effects name
+            item_effects_name = item_parts[1]
+
+            # apply fog
+            if item_effects_name == EFFECTS_NAME_FOG:
+                item_fog_start = float(item_parts[2].replace('\n', ''))
                 graphics.fog(item_fog_start)
 
                 # save log to disk
                 if save_to:
-                    disk.save_log("{},{}".format(frame_number, item_fog_start), save_to, filename)
+                    disk.save_log("{},{},{}".format(frame_number, EFFECTS_NAME_FOG, item_fog_start), save_to, EFFECTS_LOG_FILENAME)
 
-                break
+            # apply lighting
+            elif item_effects_name == EFFECTS_NAME_LIGHTING:
+                item_enabled = int(item_parts[2].replace('\n', ''))
+                graphics.lighting(item_enabled == 1)
+
+                # save log to disk
+                if save_to:
+                    disk.save_log("{},{},{}".format(frame_number, EFFECTS_NAME_LIGHTING, item_enabled), save_to, EFFECTS_LOG_FILENAME)
 
     # audio
-    def audio(self, frame_number, disk, mixer, load_from, filename):
+    def audio(self, frame_number, disk, mixer, load_from):
 
         # load log
-        audio_log = disk.load_log(load_from, filename)
+        audio_log = disk.load_log(load_from, AUDIO_LOG_FILENAME)
 
         # loop log
         for item in audio_log:
@@ -59,8 +73,9 @@ class Replay:
             item_parts = item.split(',')
             item_frame_number = int(item_parts[0])
 
-            # play sound if frames match
-            if item_frame_number == frame_number:
-                item_sound_file = item_parts[1].replace('\n', '')
-                mixer.Sound("{}{}".format(load_from, item_sound_file)).play()
-                break
+            if item_frame_number < frame_number: continue
+            if item_frame_number > frame_number: break
+
+            # play sound
+            item_sound_file = item_parts[1].replace('\n', '')
+            mixer.Sound("{}{}".format(load_from, item_sound_file)).play()

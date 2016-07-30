@@ -32,10 +32,10 @@ class Screen:
             return False
 
         # replay effects
-        self.replay.effects(frame_number, self.disk, self.graphics, self.config_provider.screen_load_from, None, EFFECTS_LOG_FILENAME)
+        self.replay.effects(frame_number, self.disk, self.graphics, self.config_provider.screen_load_from, None)
 
         # replay audio
-        self.replay.audio(frame_number, self.disk, mixer, self.config_provider.screen_load_from, AUDIO_LOG_FILENAME)
+        self.replay.audio(frame_number, self.disk, mixer, self.config_provider.screen_load_from)
 
         # display frame
         self.display.frame(frame)

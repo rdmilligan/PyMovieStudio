@@ -3,6 +3,8 @@
 
 from tracking import Tracking
 import cv2
+from random import randint
+from constants import *
 
 class ColourTracking(Tracking):
 
@@ -12,7 +14,7 @@ class ColourTracking(Tracking):
     THRESHOLD = 1000
 
     # apply
-    def apply(self, frame):
+    def apply(self, frame, frame_number, disk, graphics, save_to):
 
         # convert frame from BGR to HSV
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -24,9 +26,26 @@ class ColourTracking(Tracking):
         colour_count = cv2.countNonZero(mask)
 
         # if threshold met...
+        lighting_enabled = 0
         if colour_count > self.THRESHOLD:
             
             # handle mask
             frame = self.handle_mask(mask, frame)
+            
+            # randomly switch lighting on or off
+            if randint(0, 1) == 0:
+                graphics.lighting(True)
+                lighting_enabled = 1
+            else:
+                graphics.lighting(False)
+
+        # otherwise...
+        else:
+
+            # switch lighting off
+            graphics.lighting(False)
+
+        # save log to disk
+        disk.save_log("{},{},{}".format(frame_number, EFFECTS_NAME_LIGHTING, lighting_enabled), save_to, EFFECTS_LOG_FILENAME)
 
         return frame

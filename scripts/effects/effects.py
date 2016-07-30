@@ -53,14 +53,11 @@ class Effects:
 
         # colour tracking
         if self.colour_tracking:
-            frame = self.colour_tracking.apply(frame)
+            frame = self.colour_tracking.apply(frame, frame_number, self.disk, self.graphics, self.config_provider.effects_save_to)
 
         # fog
         if self.fog:
-            fog_start = self.fog.apply(self.graphics)
-
-            # save log to disk
-            self.disk.save_log("{},{}".format(frame_number, fog_start), self.config_provider.effects_save_to, EFFECTS_LOG_FILENAME)
+            self.fog.apply(frame_number, self.disk, self.graphics, self.config_provider.effects_save_to)
 
         # display frame
         if self.config_provider.effects_display_frame:

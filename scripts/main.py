@@ -81,10 +81,6 @@ class PyMovieStudio:
         gluPerspective(33.7, 1.3, 0.1, 100.0)
         glMatrixMode(GL_MODELVIEW)
 
-        # display
-        if self.display:
-            self.display.init_opengl()
-
     # process frame
     def _process_frame(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)

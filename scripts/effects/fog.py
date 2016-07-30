@@ -2,6 +2,7 @@
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
 from random import randint
+from constants import *
 
 class Fog:
 
@@ -40,7 +41,7 @@ class Fog:
             return self.fog_start
 
     # apply
-    def apply(self, graphics):
+    def apply(self, frame_number, disk, graphics, save_to):
 
         # get fog start
         fog_start = self._get_fog_start()
@@ -48,4 +49,5 @@ class Fog:
         # render fog
         graphics.fog(fog_start)
 
-        return fog_start
+        # save log to disk
+        disk.save_log("{},{},{}".format(frame_number, EFFECTS_NAME_FOG, fog_start), save_to, EFFECTS_LOG_FILENAME)

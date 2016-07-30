@@ -37,7 +37,7 @@ class Audio:
             return False
 
         # replay effects
-        self.replay.effects(frame_number, self.disk, self.graphics, self.config_provider.audio_load_from, self.config_provider.audio_save_to, EFFECTS_LOG_FILENAME)
+        self.replay.effects(frame_number, self.disk, self.graphics, self.config_provider.audio_load_from, self.config_provider.audio_save_to)
 
         # apply sound delay
         if randint(0, self.config_provider.audio_sound_delay) == 0:
