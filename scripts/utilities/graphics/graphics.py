@@ -2,6 +2,7 @@
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
 from OpenGL.GL import *
+from particlesystem import ParticleSystem
 
 class Graphics:
 
@@ -9,6 +10,7 @@ class Graphics:
     def __init__(self):
         self.is_fog_init = False
         self.is_lighting_init = False
+        self.particle_system = None
 
     # apply fog
     def fog(self, fog_start):
@@ -37,6 +39,23 @@ class Graphics:
             glEnable(GL_LIGHTING)
         else:
             glDisable(GL_LIGHTING)
+
+    # apply blood
+    def blood(self, x_coord, y_coord):
+ 
+        # if system not active
+        if not self.particle_system or not self.particle_system.active:
+            
+            # if coordinates supplied, initialise system
+            if x_coord and y_coord:
+                self.particle_system = ParticleSystem(x_coord, y_coord)
+            
+            # else bail out
+            else:
+                return
+
+        # handle blood
+        self.particle_system.blood()
 
 
 

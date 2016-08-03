@@ -2,8 +2,9 @@
 # GNU GENERAL PUBLIC LICENSE Version 3 (full notice can be found at https://github.com/rdmilligan/PyMovieStudio)
 
 # effects constants
-EFFECTS_NAME_FOG = "fog"
-EFFECTS_NAME_LIGHTING = "lighting"
+EFFECTS_NAME_FOG = 'fog'
+EFFECTS_NAME_LIGHTING = 'lighting'
+EFFECTS_NAME_BLOOD = 'blood'
 EFFECTS_LOG_FILENAME = 'effects_log'
 
 # audio constants

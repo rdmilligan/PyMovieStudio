@@ -74,6 +74,10 @@ class ConfigProvider:
         return self.config.getboolean('Effects', 'Fog')
 
     @property
+    def effects_blood(self):
+        return self.config.getboolean('Effects', 'Blood')
+
+    @property
     def audio_enabled(self):
         return self.config.getboolean('Audio', 'Enabled')
 

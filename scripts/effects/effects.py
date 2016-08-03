@@ -5,6 +5,7 @@ from constants import *
 from foregroundtracking import ForegroundTracking
 from colourtracking import ColourTracking
 from fog import Fog
+from blood import Blood
 from time import sleep
 
 class Effects:
@@ -34,6 +35,11 @@ class Effects:
         if self.config_provider.effects_fog:
             self.fog = Fog()
 
+        # blood
+        self.blood = None
+        if self.config_provider.effects_blood:
+            self.blood = Blood()
+
     # add special effects to frame
     def frame(self, frame_number):
 
@@ -58,6 +64,10 @@ class Effects:
         # fog
         if self.fog:
             self.fog.apply(frame_number, self.disk, self.graphics, self.config_provider.effects_save_to)
+
+        # blood
+        if self.blood:
+            self.blood.apply(frame_number, self.disk, self.graphics, self.config_provider.effects_save_to)
 
         # display frame
         if self.config_provider.effects_display_frame:

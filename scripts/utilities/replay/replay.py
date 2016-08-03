@@ -60,6 +60,24 @@ class Replay:
                 if save_to:
                     disk.save_log("{},{},{}".format(frame_number, EFFECTS_NAME_LIGHTING, item_enabled), save_to, EFFECTS_LOG_FILENAME)
 
+            # apply blood
+            if item_effects_name == EFFECTS_NAME_BLOOD:
+                item_x_coord = item_parts[2]
+                item_y_coord = item_parts[3].replace('\n', '')
+
+                if item_x_coord == 'None' or item_y_coord == 'None':
+                    item_x_coord = None
+                    item_y_coord = None
+                else:
+                    item_x_coord = float(item_x_coord)
+                    item_y_coord = float(item_y_coord)
+
+                graphics.blood(item_x_coord, item_y_coord)
+
+                # save log to disk
+                if save_to:
+                    disk.save_log("{},{},{},{}".format(frame_number, EFFECTS_NAME_BLOOD, item_x_coord, item_y_coord), save_to, EFFECTS_LOG_FILENAME)
+
     # audio
     def audio(self, frame_number, disk, mixer, load_from):
 
